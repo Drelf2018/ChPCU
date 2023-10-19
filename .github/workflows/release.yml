@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-python-exe:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -20,8 +20,6 @@ jobs:
     - name: Build
       run: pyinstaller -F -w main.py -i icon.ico
     - name: Upload
-      uses: Shopify/upload-to-release
+      uses: svenstaro/upload-release-action@v2
       with:
-        name: main
-        path: dist/main.exe
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/main.exe
