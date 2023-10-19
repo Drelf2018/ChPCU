@@ -1,0 +1,27 @@
+name: build-python-exe
+
+on:
+  release:
+    types: [published] # 表示在发布新的 Release 时触发
+
+jobs:
+  build-python-exe:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Build
+      run: pyinstaller -F -w main.py -i icon.ico
+    - name: Upload to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: dist/main.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
